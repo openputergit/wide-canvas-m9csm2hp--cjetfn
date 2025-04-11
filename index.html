@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeAI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .clay-morphism {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 
+                12px 12px 20px rgba(104, 139, 162, 0.3),
+                -12px -12px 20px rgba(255, 255, 255, 0.8),
+                inset 4px 4px 10px rgba(104, 139, 162, 0.1),
+                inset -4px -4px 10px rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #e0f2fe;
+        }
+        .message {
+            transition: all 0.3s ease;
+        }
+        .message:hover {
+            transform: scale(1.01);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="clay-morphism p-6 mb-8">
+            <h1 class="text-3xl font-bold text-sky-800 mb-2">TradeAI Assistant</h1>
+            <p class="text-sky-600">Your intelligent companion for financial insights and trading guidance</p>
+        </div>
+
+        <div class="clay-morphism p-6 mb-8 h-[60vh] overflow-y-auto" id="chat-container">
+            <div class="message clay-morphism p-4 mb-4">
+                <p class="font-medium text-sky-800">TradeAI</p>
+                <p class="text-gray-600">Hello! I'm your financial trading assistant. Ask me anything about markets, trading strategies, or financial analysis.</p>
+            </div>
+        </div>
+
+        <div class="clay-morphism p-4">
+            <form id="chat-form" class="flex gap-2">
+                <input type="text" id="user-input" class="flex-1 p-3 rounded-lg border-2 border-sky-200 focus:border-sky-400 outline-none clay-morphism" placeholder="Ask about trading, markets, or financial strategies...">
+                <button type="submit" class="clay-morphism px-6 py-3 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors">
+                    <i class="bi bi-send"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chat-form');
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+
+        const financialKeywords = ['stock', 'market', 'trading', 'invest', 'crypto', 'forex', 'analysis', 'portfolio'];
+
+        const generateResponse = (input) => {
+            // Check if the query is finance-related
+            const isFinanceRelated = financialKeywords.some(keyword => 
+                input.toLowerCase().includes(keyword)
+            );
+
+            if (!isFinanceRelated) {
+                return "I apologize, but I can only assist with financial and trading-related queries. Please ask something about trading, markets, or investments.";
+            }
+
+            // Simple response generation logic
+            const responses = [
+                "Based on current market analysis, it would be advisable to carefully consider market volatility before making that decision.",
+                "Historical trading patterns suggest that diversification might be key in this scenario.",
+                "From a technical analysis perspective, you might want to look at the moving averages and resistance levels.",
+                "Market sentiment indicators currently show mixed signals. Consider analyzing more data points.",
+                "This strategy could work well in a bull market, but make sure to implement proper risk management.",
+            ];
+
+            return responses[Math.floor(Math.random() * responses.length)];
+        };
+
+        const addMessage = (content, isUser = false) => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message clay-morphism p-4 mb-4 ${isUser ? 'ml-auto max-w-[80%]' : 'mr-auto max-w-[80%]'}`;
+            
+            const sender = document.createElement('p');
+            sender.className = 'font-medium text-sky-800';
+            sender.textContent = isUser ? 'You' : 'TradeAI';
+            
+            const message = document.createElement('p');
+            message.className = 'text-gray-600';
+            message.textContent = content;
+
+            messageDiv.appendChild(sender);
+            messageDiv.appendChild(message);
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = userInput.value.trim();
+            
+            if (message) {
+                addMessage(message, true);
+                userInput.value = '';
+
+                // Simulate AI thinking with a slight delay
+                setTimeout(() => {
+                    const response = generateResponse(message);
+                    addMessage(response);
+                }, 500);
+            }
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
